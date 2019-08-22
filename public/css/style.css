@@ -1,0 +1,266 @@
+body {
+ 	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+	font-size: 12px;
+	margin: 0px 0px 0px 0px;
+/*	background-image : url(../images/Top-Gradient.png);*/
+	background-repeat: repeat-x;
+}
+
+INPUT, SELECT {
+background-color : #automatic;
+color : #092002;
+font-family : Tahoma, Verdana, sans-serif;
+font-size : 12px;
+font-weight : normal;
+border-color : #154A07;
+border-top-width : 1px;
+border-right-width : 1px;
+border-bottom-width : 1px;
+border-left-width : 1px;
+text-indent : 2px;
+}
+
+a
+{
+ 	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+	text-decoration : none;
+	color: #7F00FF;
+}
+
+.table_class table 
+{
+	background-color: white;
+	text-align: left;
+	border: 1px solid #D52B00;
+}
+
+.table_class table a, .table_class table, .table_class tbody, .table_class tfoot, .table_class tr, .table_class th, .table_class td 
+{
+	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+	line-height: 1.5em;
+	color: #fffff;
+	empty-cells: hide;
+}
+
+.table_class table a
+{
+	text-decoration: none;	
+	color: #4A8CFF;
+}
+
+.table_class th
+{
+	color: white;
+	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+	background-color: #333333;
+	border: 1px solid #aeb3b6;
+/*	background-image: url(../images/catbg.gif);*/
+	height:20px;
+	font-size:12px;
+}
+
+.table_class td
+{
+ 	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+	border: 1px solid #DADEEE;
+	font-weight : bold;
+	font-size:12px;
+}
+
+.table_class_list table 
+{
+	background-color: white;
+	text-align: left;
+	border: 1px solid #D52B00;
+}
+
+.table_class_list table a, .table_class_list table, .table_class_list tbody, .table_class_list tfoot, .table_class_list tr, .table_class_list th, .table_class_list td 
+{
+	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+	line-height: 1.5em;
+	color: #fffff;
+	empty-cells: unhide;
+}
+
+.table_class_list table a
+{
+	text-decoration: none;	
+	color: #4A8CFF;
+}
+
+.table_class_list th
+{
+	color: white;
+	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+	background-color: #FBE57E;
+	border: 1px solid #BEBFC3;
+	background-image: url(../images/catbg.gif);
+	height:20px;
+	font-size:12px;
+}
+
+.table_class_list td
+{
+ 	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+	border: 1px solid #DADEEE;
+	padding-left: 3px;
+	/*font-weight : bold;*/
+	font-size:11px;
+	/*background-color: #FAF8E7;*/
+}
+
+.table_class_list tbody tr:hover td
+{
+	background-color: #C6F7F3;
+}
+
+.table_class_listpos table 
+{
+	background-color: white;
+	text-align: left;
+	border: 1px solid #D52B00;
+}
+
+.table_class_listpos table a, .table_class_listpos table, .table_class_listpos tbody, .table_class_listpos tfoot, .table_class_listpos tr, .table_class_listpos th, .table_class_listpos td 
+{
+	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+	line-height: 1.5em;
+	color: #fffff;
+	empty-cells: hide;
+}
+
+.table_class_listpos table a
+{
+	text-decoration: none;	
+	color: #4A8CFF;
+}
+
+.table_class_listpos th
+{
+	color: white;
+	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+	background-color: #FBE57E;
+	border: 1px solid #BEBFC3;
+	background-image: url(../images/catbg.gif);
+	height:20px;
+	font-size:12px;
+}
+
+.table_class_listpos td
+{
+ 	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+	border: 1px solid #DADEEE;
+	padding-left: 3px;
+	font-weight : bold;
+	font-size:12px;
+	/*background-color: #FAF8E7;*/
+}
+
+.table_class_listpos tbody tr:hover td
+{
+	background-color: #C6F7F3;
+}
+
+.table_report th
+{
+	color: black;
+	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+	background-color: #FBD35B;
+	border: 1px solid #BEBFC3;
+	height:20px;
+	font-size:12px;
+}
+
+.table_report td
+{
+ 	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+	border: 1px solid #DADEEE;
+	font-size:12px;
+	/*background-color: #FAF8E7;*/
+}
+
+.table_report tbody tr:hover td
+{
+	background-color: #C6F7F3;
+}
+
+.table_cari td
+{
+	height:25px;
+ 	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+	font-size:10px;
+}
+
+.logo
+{
+	font-family		 : Lucida Grande, Verdana, Geneva, Sans-serif;
+	text-align       : center;
+	border           : 5px double #EAECF5;
+	background-image : url(../images/smflogo.gif);
+	background-repeat: repeat-x;
+	height           : 94px;
+}
+
+.LogoTitle
+{
+ 	font:25px georgia bold italic;
+	color: white;
+	letter-spacing:0.1em;
+	line-height:0px;
+	padding-left:15px; 
+	padding-top:20px; 
+	padding-right:10px;"
+}
+
+.button {
+	font-family		 : Lucida Grande, Verdana, Geneva, Sans-serif;
+	text-align       : center;
+	font-size        : 11px;
+	COLOR            : black;
+	border           : 3px double #EAECF5;
+	width            : auto;
+	background-image : url(../images/th_bg.jpg);
+}
+
+.line {
+	border: 0;
+	width: 100%;
+	color: #f00;
+	background-color: #ED5929;
+	height: 2px;
+	padding-bottom : 0px;
+}
+
+.CrossLine{
+	background-image : url(../images/dark_fade_g.png);
+	width: 100%;
+	height: 30px;
+}
+
+.pageName {
+	font:21px georgia;
+	color: #CC3300;
+	letter-spacing:0.1em;
+	line-height:0px;
+}
+
+.cursor_image
+{
+ 	border : 0px;
+	cursor : pointer;	
+}
+
+.resizeSelectForm
+{
+ 	width:80px;
+}
+
+.resizeSelectForm2
+{
+ 	width:100px;
+}
+
+.InputAlignRight
+{
+	text-align: right;
+}

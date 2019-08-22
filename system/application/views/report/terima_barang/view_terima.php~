@@ -1,0 +1,143 @@
+<?php
+if($excel==""){
+    $this->load->view('header');
+    $this->load->view('space');
+    $tglx=date('m-Y');
+    $tglawal="01-".$tglx;
+    $tglskrng=date('d-m-Y');
+    $gantikursor = "onkeydown=\"changeCursor(event,'order',this)\"";
+?>
+
+<link rel="stylesheet" type="text/css" href="<?=base_url();?>public/css/popcalendar.css" />
+<script language="javascript" src="<?=base_url();?>public/js/report_terima.js"></script>
+<script language="javascript" src="<?=base_url();?>public/js/popcalendar.js"></script>
+<body>
+  <fieldset><legend>Report Penerimaan Barang</legend>
+  <form method="post" id="form1" name="form1" action="">
+  <table width="50%" border="0" cellspacing="0" cellpadding="0" class="table_cari">
+  
+  <tr>
+    <td><b>Tanggal</b></td>
+    <td align="center"><b>:</b></td>
+    <td><input type="text" name="tgl_1" id="tgl_1" size="15" value="<?=(!empty($detail))?$tgl_1:$tglawal;?>">
+		<input id="popUp" title="Click to show calendar" style="BORDER-RIGHT: #333333 1px solid; BORDER-TOP: #333333 1px solid; FONT-SIZE: 11px; BORDER-LEFT: #333333 1px solid; BORDER-BOTTOM: #333333 1px solid; HEIGHT: 17px" accesskey="popUpCalc" onClick="popUpCalendar(this, form1.tgl_1, 'dd-mm-yyyy');" type="button" value="V" name="popUpCalc"></td>
+	<td><b>s/d</b></td>
+    <td><input type="text" name="tgl_2" id="tgl_2" size="15" value="<?=(!empty($detail))?$tgl_2:$tglskrng?>">
+	<input id="popUp" title="Click to show calendar" style="BORDER-RIGHT: #333333 1px solid; BORDER-TOP: #333333 1px solid; FONT-SIZE: 11px; BORDER-LEFT: #333333 1px solid; BORDER-BOTTOM: #333333 1px solid; HEIGHT: 17px" accesskey="popUpCalc" onClick="popUpCalendar(this, form1.tgl_2, 'dd-mm-yyyy');" type="button" value="V" name="popUpCalc"></td>
+  </tr>
+  <?php
+      $mylib = new globallib();
+      echo $mylib->write_textbox("No Dokumen Terima","nodok","","10","10","readonly='readonly'","text",$gantikursor,"1");
+  ?>
+  <tr>
+      <td>&nbsp;</td>
+      <td>:</td>
+      <td><input type="checkbox" name="tdet" value="1" checked> Tampilkan Detail</td>
+  </tr>
+  <tr>
+  <input type="hidden" name="par" id="par">
+    <td><input type="submit" value="Search" ></td>
+    <td colspan="4">&nbsp;</td>
+
+  </tr>
+</table>
+</form>
+  </fieldset>
+<?php
+    }
+?>
+<br>
+
+<?php
+    if(!empty($excel)){
+    header('Content-Type: application/vnd.ms-excel;');
+    header('Content-Disposition: attachment; filename="report POS.xls"');
+    }
+?>
+<?php if(!empty($detail)){ ?>
+<div id="tabel1" style="<?=$display1?>">
+    <?php
+    if($excel!="ok"){
+?>
+
+<div style="text-align:right;width:900px;">
+    <span>
+            <img src="<?=base_url();?>public/images/ic_excel.gif" width="16" height="16" title="search" border="0" onclick="ExportToExcel()">&nbsp;Export To Excel
+    </span>
+
+</div>
+<?php }?>
+<fieldset><legend>Report Transaksi By Brand</legend>
+  <table border="1" class="table_report" cellpadding="2" cellspacing="0">
+    <tr> 
+      <th  nowrap>No</th>
+      <th rowspan="1" nowrap>No Dokumen</th>
+      <th rowspan="1" nowrap>Tanggal</th>
+      <th rowspan="1" nowrap>Tanggal Terima</th>
+      <th rowspan="1" nowrap>No PO</th>
+      <th rowspan="1" nowrap>Keterangan</th>
+      <?php
+        if($tdet=="1"){
+            echo '<th rowspan="1" nowrap>Kode Barang</th>';
+            echo '<th rowspan="1" nowrap>Nama Barang</th>';
+            echo '<th rowspan="1" nowrap>Qty</th>';
+        }?>
+    </tr>
+    <?php
+//    $sumQty = 0;
+//    $sumNetto = 0;
+//    echo "<pre>";print_r($detail);echo "</pre>";die();
+for($a = 0;$a<count($detail);$a++)
+{
+    //echo "<pre>";print_r($detail);echo "</pre>";//die();
+?>
+    <tr> 
+      <td align="center" nowrap><?=($a+1);?></td>
+      <td align="center" nowrap><?=$detail[$a]['NoDokumen'];?></td>
+      <td align="center" nowrap><?=$detail[$a]['Tanggal'];?></td>
+      <td align="left" nowrap><?=$detail[$a]['TglTerima'];?></td>
+      <td align="left" nowrap><?=$detail[$a]['NoPO'];?></td>
+      <td align="left" nowrap><?=$detail[$a]['Keterangan'];?></td>
+      <?php
+      if($tdet=="1"){
+            echo '<td align="left" nowrap>'.$detail[$a]['PCode'].'</td>';
+            echo '<td align="left" nowrap>'.$detail[$a]['NamaLengkap'].'</td>';
+            echo '<td align="left" nowrap>'.$detail[$a]['QtyTerima'].'</td>';
+        }
+        ?>
+    </tr>
+    <?
+//$sumQty     =	$detail[$a]['QNetto']+$sumQty;
+//$sumNetto   =	$detail[$a]['QNetto']+$sumNetto;
+}
+?>
+    <tr> 
+      <td colspan="14" align="center">&nbsp;</td>
+    </tr>
+    
+  </table>
+</fieldset>
+</div>
+<?php }?>
+</body>
+<script>
+function cek()
+{
+	if(document.getElementById('pilihan').value !== "")
+	{						
+	}
+	else
+	{
+		alert("pilih dulu");
+	}
+}
+
+    function ExportToExcel(){
+        document.getElementById('par').value="ok";
+        document.form1.submit();
+   }
+
+</script>
+<?php
+$this->load->view('footer'); 
+?>

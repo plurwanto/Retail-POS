@@ -1,0 +1,1 @@
+Aplikasi Penjualan dan Stok Barang ini dirancang untuk memenuhi kebutuhan standar pengelolaan sistem informasi penjualan baik distribusi maupun retail. Pada prinsipnya, program Penjualan dan Stok Barang ini mengikuti logika sederhana jual dan beli. Pembelian akan menambah persediaan dan penjualan akan mengurangi persediaan (stock control).

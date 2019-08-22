@@ -1,0 +1,249 @@
+<?php
+class Opnamemodel extends Model {
+	
+    function __construct(){
+        parent::__construct();
+    }
+
+    function getList($num, $offset,$id,$with)
+	{
+	 	if($offset !=''){
+			$offset = $offset;
+		}            
+        else{
+        	$offset = 0;
+        }
+		$clause="";
+		if($id!=""){
+			if($with=="NoDokumen"){
+				$clause = "where $with like '%$id%'";
+			}
+			else
+			{
+				$clause = "where $with = '$id'";
+			}
+		}
+    	$sql = "
+			select NoDokumen,date_format(TglDokumen,'%d-%m-%Y') as Tanggal,TglDokumen
+			,h.Keterangan
+			from trans_opname_header h
+			 $clause order by cast(NoDokumen as unsigned) desc Limit $offset,$num
+			";
+		return $this->getArrayResult($sql);
+    }
+    function getDate(){
+    	$sql = "SELECT date_format(TglTrans,'%d-%m-%Y') as TglTrans,TglTrans as TglTrans2 from aplikasi ORDER BY Tahun DESC LIMIT 0,1";
+		return $this->getRow($sql);
+    }
+    function num_row($id,$with){
+     	$clause="";
+     	if($id!=''){
+			if($with=="NoDokumen"){
+				$clause = " where $with like '%$id%'";
+			}
+			else
+			{
+				$clause = " where $with = '$id'";
+			}
+		}
+		$sql = "SELECT NoDokumen FROM trans_opname_header $clause";
+        $qry = $this->db->query($sql);
+        $num = $qry->num_rows();
+        $qry->free_result();
+        return $num;
+	}
+	function getLokasi()
+	{
+		$sql = "select KdLokasi,Keterangan from lokasi order by KdLokasi";
+		return $this->getArrayResult($sql);
+	}
+	function ifPCodeBarcode($id){
+		$bar = substr($id,0,10);
+		$sql = "SELECT PCode FROM masterbarang Where PCode='$id'";
+		return $this->getRow($sql);
+	}
+	function cekShareLokasi($kode)
+	{
+		$sql = "select KodeBarang from stock where KodeBarang='$kode' ";
+            return $this->NumResult($sql);
+	}
+	function getPCodeDet($pcode,$tahun,$field)
+	{
+		$sql = "
+                    SELECT $field,NamaLengkap,HargaJual FROM
+                    (SELECT $field,KodeBarang FROM stock WHERE KodeBarang='$pcode' AND Tahun='$tahun')a
+                     INNER JOIN masterbarang b
+                     ON a.KodeBarang = b.PCode";
+		return $this->getRow($sql);
+	}
+	function getNewNo($tahun)
+	{
+		$sql = "select NoOpname from aplikasi where Tahun='$tahun'";
+		return $this->getRow($sql);
+	}
+	function CekStock($field,$fieldakhir,$pcode,$tahun)
+	{
+		$sql = "select $field,$fieldakhir from stock
+		where Tahun='$tahun'
+		and KodeBarang='$pcode'";
+        return $this->getRow($sql);
+	}
+	
+	function cekPast($no,$pcode)
+	{
+		$sql = "select distinct QtyKomputer,QtyOpname,Selisih
+		from trans_opname_detail
+		where NoDokumen='$no' and PCode='$pcode'";
+        return $this->getRow($sql);
+	}
+	function FindLastCounter($no)
+	{
+		$sql = "select distinct Counter
+		from trans_opname_detail
+		where NoDokumen='$no' order by Counter desc limit 0,1";
+        return $this->getRow($sql);
+	}
+	function getHeader($id)
+	{
+		$sql = "SELECT NoDokumen,DATE_FORMAT(TglDokumen,'%d-%m-%Y') as TglDokumen
+		,h.Keterangan
+		from trans_opname_header h
+		Where NoDokumen='$id'";
+		return $this->getRow($sql);
+	}
+	function getDetail($id)
+	{
+		$sql = "
+		select d.*,NamaInitial from(
+		SELECT distinct NoDokumen,PCode,QtyKomputer,QtyOpname,Selisih
+		from trans_opname_detail 
+		Where NoDokumen='$id'
+		) d
+		left join
+		(
+			select PCode,NamaLengkap as NamaInitial
+			from masterbarang
+		) masterb
+		on masterb.PCode = d.PCode
+		";
+		return $this->getArrayResult($sql);
+	}
+	
+	function getlistStock($thn,$field)
+	{
+		$sql = "SELECT Qty,KodeBarang,NamaLengkap,HargaJual FROM
+					(SELECT QtyAkhir01 AS Qty, KodeBarang FROM stock WHERE Tahun='2014' ORDER BY KodeBarang)s
+					INNER JOIN masterbarang m ON m.`PCode`=s.KodeBarang
+		";
+		return $this->getArrayResult($sql);
+	}
+	function getDetailForPrint($id)
+	{
+		$sql = "
+		select d.*,NamaInitial,HJ,(HJ * Selisih) AS Netto from(
+		SELECT distinct PCode,QtyKomputer,QtyOpname,Selisih,HJualItem AS HJ
+		from trans_opname_detail 
+		Where NoDokumen='$id'
+		) d
+		left join
+		(
+			select PCode,NamaStruk as NamaInitial
+			from masterbarang
+		) masterb
+		on masterb.PCode = d.PCode
+		";
+		return $this->getArrayResult($sql);
+	}
+	function getCountDetail($id)
+	{
+		$sql = "SELECT NoDokumen FROM trans_opname_detail where NoDokumen='$id'";
+        $qry = $this->db->query($sql);
+        $num = $qry->num_rows();
+        $qry->free_result();
+        return $num;
+	}
+        function NamaPrinter($id)
+        {
+            $sql = "SELECT * from kassa where ip='$id'";
+                $qry = $this->db->query($sql);
+                $row = $qry->result_array();
+            return $row;
+        }
+   function aplikasi()
+	{
+		$sql = "select * from aplikasi";
+		$qry = $this->db->query($sql);
+                $row = $qry->result_array();
+            return $row;
+	}
+        function all_trans($tgl)
+	{
+            $sql = "SELECT Tanggal,Kasir,COUNT(NoStruk) as TTLStruk,SUM(TotalItem) as TotalItem,SUM(TotalNilai) as TotalNilai,
+                    SUM(TotalBayar)as TotalBayar,SUM(Kembali) as Kembali,SUM(Tunai) as Tunai,SUM(KKredit) as KKredit,
+SUM(KDebit)as KDebit,SUM(Voucher)as Voucher  FROM transaksi_header WHERE STATUS='1' AND Tanggal='$tgl' GROUP BY Kasir ";
+//		$sql = "select * from transaksi_header where status='1' and Tanggal='$tgl' ORDER BY NoStruk DESC ";
+		$qry = $this->db->query($sql);
+                $row = $qry->result_array();
+            return $row;
+	}
+	function getDetailAttrCetak($id,$pcode,$counter)
+	{
+		$sql = "
+		select NamaAttribute,Nilai,TipeAttr from
+		(
+			select KdAttribute,NilAttribute as Nilai from trans_opname_detail 
+			Where NoDokumen='$id' and PCode='$pcode' and Counter='$counter'
+		)d 
+		left join
+		(
+			select KdAttribute,TipeAttr,NamaAttribute from attribute_barang 
+		)a
+		on a.KdAttribute=d.KdAttribute";
+		return $this->getArrayResult($sql);
+	}
+	function getSatuan($pcode)
+	{
+		$sql = "SELECT KdSatuanBesar,(select keterangan from satuan where NamaSatuan=KdSatuanBesar) as NamaBesar,
+KdSatuanTengah,(select keterangan from satuan where NamaSatuan=KdSatuanTengah) as NamaTengah,
+KdSatuanKecil ,(select keterangan from satuan where NamaSatuan=KdSatuanKecil) as NamaKecil 
+		from masterbarang where PCode='$pcode'";
+		return $this->getRow($sql);
+	}
+	function getDetailAttr($id,$pcode,$counter)
+	{
+		$sql = "
+			select KdAttribute,NilAttribute from trans_opname_detail 
+			Where NoDokumen='$id' and PCode='$pcode' and Counter='$counter'";
+		return $this->getArrayResult($sql);
+	}
+	function locktables($table)
+	{
+		$this->db->simple_query("LOCK TABLES $table");
+	}
+	function unlocktables()
+	{
+		$this->db->simple_query("UNLOCK TABLES");
+	}
+	function getRow($sql)
+	{
+		$qry = $this->db->query($sql);
+        $row = $qry->row();
+        $qry->free_result();
+        return $row;
+	}
+	function getArrayResult($sql)
+	{
+		$qry = $this->db->query($sql);
+        $row = $qry->result_array();
+        $qry->free_result();
+        return $row;
+	}
+	function NumResult($sql)
+	{
+		$qry = $this->db->query($sql);
+        $row = $qry->num_rows();
+        $qry->free_result();
+        return $row;
+	}
+}
+?>
